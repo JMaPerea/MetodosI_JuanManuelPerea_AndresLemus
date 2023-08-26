@@ -25,7 +25,7 @@ def potflujo(x,y,fl,h,M=None):
     plt.figure(figsize=(4,4),dpi=100)
     plt.quiver(X,Y,Vx,Vy,scale=40, width=.009,color="Blue")
     #plt.contour(X,Y,fl(X,Y),levels=20)
-    return fl(X,Y)
-print(potflujo(x, y, fl, h,Ind))
+    return plt.show
+potflujo(x, y, fl, h,Ind)
     
 
