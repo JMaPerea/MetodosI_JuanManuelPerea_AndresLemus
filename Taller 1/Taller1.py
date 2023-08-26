@@ -23,7 +23,7 @@ def potflujo(x,y,fl,h,M=None):
     Vx=(fl(X+h,Y)-fl(X,Y))/(2*h)
     Vy=(fl(X,Y+h)-fl(X,Y))/(2*h)
     plt.figure(figsize=(4,4),dpi=100)
-    plt.quiver(X,Y,Vx,Vy,scale=40, width=.009,color="Blue")
+    plt.quiver(X,Y,Vx,Vy,scale=30, width=.005,color="Blue")
     #plt.contour(X,Y,fl(X,Y),levels=20)
     return plt.show
 potflujo(x, y, fl, h,Ind)
