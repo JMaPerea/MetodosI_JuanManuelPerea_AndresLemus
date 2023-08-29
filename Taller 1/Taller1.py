@@ -13,9 +13,9 @@ R=2
 V=2
 h=0.001
 
-fl=lambda x,y: V*x*(1-R**2/(x**2+y**2))
+fl=lambda x,y: V*x*(1-(R**2/(x**2+y**2)))
 
-Ind= lambda x,y: (x**2+y**2)<R
+Ind= lambda x,y: (x**2+y**2)<2*R
 
 def potflujo(x,y,fl,h,M=None):
     
@@ -24,7 +24,9 @@ def potflujo(x,y,fl,h,M=None):
         X,Y=((np.ma.masked_where(M(X,Y), X)),(np.ma.masked_where(M(X,Y), Y)))
     Vx=(fl(X+h,Y)-fl(X,Y))/(2*h)
     Vy=(fl(X,Y-h)-fl(X,Y))/(2*h)
+    
     plt.figure(figsize=(4,4),dpi=100)
+    
     plt.quiver(X,Y,Vx,Vy,scale=30, width=.008,color="Blue")
     
     return None
@@ -53,7 +55,7 @@ def vflujo(x,y,fn):
     Vy= Vy / np.sqrt(Vx**2 + Vy**2)
     plt.xlim(0, 1)
     plt.ylim(-0.02, 1)
-    plt.plot(r[0], r[1], marker="o", markersize=10, markeredgecolor=None, markerfacecolor="Blue")
+    plt.plot(r[0], r[1], marker="o", markersize=5, markeredgecolor="Blue", markerfacecolor="Blue")
     plt.plot(x1,z, color="Black")
     plt.quiver(X,Y,-Vx,-Vy,scale=30, width=.005,color="Red")
     
