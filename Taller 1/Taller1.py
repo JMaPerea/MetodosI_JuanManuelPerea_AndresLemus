@@ -40,17 +40,21 @@ y1=np.linspace(0, 1, num=25)
 r=np.array((0.51, 0.21), dtype=float)
 d=r[1]
 Vp= lambda x,y: (1/np.sqrt((x-r[0])**2+(y-d)**2))-(1/np.sqrt((x-r[0])**2+(y+d)**2))
-#print(Vp(x,y))
-Ind1= lambda x,y: np.sqrt((x-r[0])**2+(y-d)**2)<0.1
-Ind2= lambda x,y: np.sqrt((x-r[0])**2+(y+d)**2)<0.1
+
+z=np.zeros(25)
 
 
-def vflujo(x,y,fn,M=None, M2=None):
+def vflujo(x,y,fn):
     X,Y=np.meshgrid(x,y)
-    if M:
-        X,Y=((np.ma.masked_where(M(X,Y), X)),(np.ma.masked_where(M(X,Y), Y)))
-        X,Y=((np.ma.masked_where(M2(X,Y), X)),(np.ma.masked_where(M2(X,Y), Y)))
+    
     Vx=(fn(X+h,Y)-fn(X,Y))/(h)
     Vy=(fn(X,Y+h)-fn(X,Y))/(h)
-    plt.quiver(X,Y,-Vx,-Vy,scale=400, width=.003,color="Red")
-vflujo(x1, y1, Vp, Ind1,Ind2)
+    Vx= Vx / np.sqrt(Vx**2 + Vy**2)
+    Vy= Vy / np.sqrt(Vx**2 + Vy**2)
+    plt.xlim(0, 1)
+    plt.ylim(-0.02, 1)
+    plt.plot(r[0], r[1], marker="o", markersize=10, markeredgecolor=None, markerfacecolor="Blue")
+    plt.plot(x1,z, color="Black")
+    plt.quiver(X,Y,-Vx,-Vy,scale=40, width=.004,color="Red")
+    
+vflujo(x1, y1, Vp)
