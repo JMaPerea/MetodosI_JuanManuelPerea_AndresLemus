@@ -27,8 +27,8 @@ def potflujo(x,y,fl,h,M=None):
     plt.figure(figsize=(4,4),dpi=100)
     plt.quiver(X,Y,Vx,Vy,scale=30, width=.008,color="Blue")
     
-    return plt.show
-#potflujo(x, y, fl, h,Ind)
+    return None
+potflujo(x, y, fl, h,Ind)
 
 
 """
@@ -55,6 +55,10 @@ def vflujo(x,y,fn):
     plt.ylim(-0.02, 1)
     plt.plot(r[0], r[1], marker="o", markersize=10, markeredgecolor=None, markerfacecolor="Blue")
     plt.plot(x1,z, color="Black")
-    plt.quiver(X,Y,-Vx,-Vy,scale=40, width=.004,color="Red")
+    plt.quiver(X,Y,-Vx,-Vy,scale=30, width=.005,color="Red")
     
+    return None
+
+
 vflujo(x1, y1, Vp)
+potflujo(x, y, fl, h,Ind)
