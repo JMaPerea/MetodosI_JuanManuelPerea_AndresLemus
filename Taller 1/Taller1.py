@@ -122,24 +122,8 @@ val[1]=g/2vo^2cos^s(theta)
 """
 g=9.8
 theta=math.atan(-val[0])
-vo=(g/2*val[1])/((np.cos(theta))**2)
-print(vo,theta)
-
-#_fx = sym.lambdify([_x],fx,'numpy') 
-#_dfx = sym.lambdify([_x],dfx,'numpy') 
+vo=(g/val[1])/2*((np.cos(theta))**2)
+print(vo,theta*180/np.pi)
 
 
-#voy=_dfx(X[0])
-# _y = sym.Symbol('y',real=True)
-# fy = Interpolate(_y,Y,X)
-# fy = sym.simplify(fy)
-# fy = fy/9.8
-# dfy = sym.diff(fy,_y,1)
-# _fy = sym.lambdify([_y],fy,'numpy') 
-# _dfy = sym.lambdify([_y],dfy,'numpy') 
-
-# vox=_dfy(Y[0])
-
-# vo = np.sqrt(vox**2+voy**2)
-# print(vo)
 
