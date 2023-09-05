@@ -1,6 +1,9 @@
 "taller 1"
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+import sympy as sym
+from scipy.interpolate import lagrange
 
 """
 Ejercicio Derivacion 6
@@ -30,7 +33,7 @@ def potflujo(x,y,fl,h,M=None):
     plt.quiver(X,Y,Vx,Vy,scale=30, width=.008,color="Blue")
     
     return None
-potflujo(x, y, fl, h,Ind)
+
 
 
 """
@@ -62,5 +65,66 @@ def vflujo(x,y,fn):
     return None
 
 
-vflujo(x1, y1, Vp)
-potflujo(x, y, fl, h,Ind)
+#vflujo(x1, y1, Vp)
+#potflujo(x, y, fl, h,Ind)
+
+"""
+Ejercicio interpolación 4
+
+"""
+par=pd.read_csv("Parabolico.csv")
+X=[]
+Y=[]
+for i,o in zip(par['X'],par['Y']):
+    X.append(i)
+    Y.append(o)
+X=np.array(X)
+Y=np.array(Y)
+
+#print(X,Y)
+
+def Lagrange(x,X,i):   
+    L = 1    
+    for j in range(X.shape[0]):
+        if i != j:
+            L *= (x - X[j])/(X[i]-X[j])
+            
+    return L
+
+
+def Interpolate(x,X,Y):    
+    Poly = 0
+    for i in range(X.shape[0]):
+        Poly += Lagrange(x,X,i)*Y[i]
+        
+    return Poly
+x=np.linspace(1,6,num=100)
+
+
+
+
+
+
+_x = sym.Symbol('x',real=True)
+fx = Interpolate(_x,X,Y)
+fx = sym.simplify(fx)
+
+
+dfx = sym.diff(fx,_x,1)
+_fx = sym.lambdify([_x],fx,'numpy') 
+_dfx = sym.lambdify([_x],dfx,'numpy') 
+voy=_dfx(X[0])
+
+_y = sym.Symbol('y',real=True)
+fy = Interpolate(_y,Y,X)
+fy = sym.simplify(fy)
+fy = fy/9.8
+dfy = sym.diff(fy,_y,1)
+_fy = sym.lambdify([_y],fy,'numpy') 
+_dfy = sym.lambdify([_y],dfy,'numpy') 
+
+vox=_dfy(Y[0])
+
+vo = np.sqrt(vox**2+voy**2)
+print(vo)
+
