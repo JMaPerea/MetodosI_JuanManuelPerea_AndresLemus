@@ -3,8 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import sympy as sym
-from scipy.interpolate import lagrange
-
+import math
 """
 Ejercicio Derivacion 6
 
@@ -106,25 +105,41 @@ x=np.linspace(1,6,num=100)
 
 
 _x = sym.Symbol('x',real=True)
-fx = Interpolate(_x,X,Y)
-fx = sym.simplify(fx)
+y_x = Interpolate(_x,X,Y)
+y_x = sym.simplify(y_x)
+#dy_x = sym.diff(y_x,_x,1)
+#d2y_x = sym.diff(y_x,_x,2)
+val=sym.Poly(y_x)
+val=val.coeffs()
+print(val)
+
+"""
+Dada la operación en el punto 4 de la sección interpolacion en Taller 1.pdf
+Sabemos que
+val[0]=tan(theta)
+val[1]=g/2vo^2cos^s(theta)
+
+"""
+g=9.8
+theta=math.atan(-val[0])
+vo=(g/2*val[1])/((np.cos(theta))**2)
+print(vo,theta)
+
+#_fx = sym.lambdify([_x],fx,'numpy') 
+#_dfx = sym.lambdify([_x],dfx,'numpy') 
 
 
-dfx = sym.diff(fx,_x,1)
-_fx = sym.lambdify([_x],fx,'numpy') 
-_dfx = sym.lambdify([_x],dfx,'numpy') 
-voy=_dfx(X[0])
+#voy=_dfx(X[0])
+# _y = sym.Symbol('y',real=True)
+# fy = Interpolate(_y,Y,X)
+# fy = sym.simplify(fy)
+# fy = fy/9.8
+# dfy = sym.diff(fy,_y,1)
+# _fy = sym.lambdify([_y],fy,'numpy') 
+# _dfy = sym.lambdify([_y],dfy,'numpy') 
 
-_y = sym.Symbol('y',real=True)
-fy = Interpolate(_y,Y,X)
-fy = sym.simplify(fy)
-fy = fy/9.8
-dfy = sym.diff(fy,_y,1)
-_fy = sym.lambdify([_y],fy,'numpy') 
-_dfy = sym.lambdify([_y],dfy,'numpy') 
+# vox=_dfy(Y[0])
 
-vox=_dfy(Y[0])
-
-vo = np.sqrt(vox**2+voy**2)
-print(vo)
+# vo = np.sqrt(vox**2+voy**2)
+# print(vo)
 
