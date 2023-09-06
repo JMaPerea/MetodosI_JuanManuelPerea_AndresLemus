@@ -17,7 +17,7 @@ plt.plot(x,func(x))
 plt.grid()
 
 """
-funcion retorna raiz x3
+funcion retorna raiz=x3
 """
 def muller(x0,x1,x2,func,max_it=100,tol=1e-10,):
     for i in range(max_it):
@@ -40,8 +40,11 @@ def muller(x0,x1,x2,func,max_it=100,tol=1e-10,):
         
         else:
             x3=x3_neg
+        """
+        Criterio de parada
         
-        if abs(x3-x2) < tol:
+        """
+        if abs((x3-x2)/x3) < tol:
             return x3,'Iteraciones',i
         else:
             x0=x1
