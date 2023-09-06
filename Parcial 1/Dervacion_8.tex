@@ -1,0 +1,30 @@
+\documentclass{article}
+
+\usepackage{geometry}
+
+\usepackage{amsmath}
+
+\usepackage{graphicx}
+
+\title{Derivación 8 (Teórico)}
+
+\author{Juan M. Perea, Andres Lemus}
+
+\date{06/09/2023}
+
+\begin{document}
+
+\maketitle
+
+$\Omega=[(x_0,fx(x_0)),(x_1,fx(x_1)),(x_2,fx(x_2))]$\\
+Iteración 1\\
+$L_0(x)=\frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)}=\frac{x^2-xx_2-xx_1+x_1x_2}{x^2_0-x_0x_2-x_0x_1+x_1x_2}$\\
+Iteración 2\\
+$L_1(x)=\frac{(x-x_0)(x-x_2))}{(x_1-x_0)(x_1-x_2)}=\frac{x^{2}-xx_0-xx_2+x_0x_2}{x_1^{2}-x_1x_2-x_1x_0+x_0x_2}$\\
+Iteración 3\\
+$L_2(x)=\frac{(x-x_1)(x-x_0))}{(x_2-x_0)(x_2-x_1)}=\frac{x^{2}-xx_1-xx_2+x_0x_1}{x_2^{2}-x_1x_2-x_2x_0+x_0x_1}$\\
+Polinomio interpolador:\\
+$P(x)=f(x_0)\frac{(x-x_1)(x-x_2)}{(x_0-x_1)(x_0-x_2)}+f(x_1)\frac{(x-x_0)(x-x_2))}{(x_1-x_0)(x_1-x_2)}+f(x_2)\frac{(x-x_1)(x-x_0))}{(x_2-x_0)(x_2-x_1)}$
+
+
+\end{document}
