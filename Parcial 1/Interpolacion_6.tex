@@ -1,0 +1,52 @@
+\documentclass{article}
+
+\usepackage{geometry}
+
+\usepackage{amsmath}
+
+\usepackage{graphicx}
+
+\title{Interpolación 6 (Teórico)}
+
+\author{Juan M. Perea, Andres Lemus}
+
+\date{06/09/2023}
+
+\begin{document}
+
+\maketitle
+
+ \begin{enumerate}
+\renewcommand{\theenumi}{\roman{enumi}}
+\item g)\\
+	Dado:\\
+	$f(x)=f[x_0]+f[x_0,x_1](x-x_0)+f[x_0,x_1,x_2](x-x_0)(x-x_1)$\\
+	Por comodidad asignamos variables:\\
+	$f[x_0]=I f[x_0,x_1]=J f[x_0,x_1,x_2]=K$\\
+	$f(x)=I+Jx-Jx_0+K(x^2-xx_1-xx_0+x_0x_1)$\\
+	$f(x)=I+Jx-Jx_0+Kx^2-Kxx_1-Kxx_0+Kx_0x_1=ax^2+bx+c$\\
+	Organizamos:\\
+	$Kx^2-Kx_0x-Kx_1x+Jx+Kx_0x_1-Jx_0+I=ax^2+bx+c$\\
+	Obtenemos:\\
+	$a=K$\\
+	$b=J-K(x_0+x_1)$\\
+	$c=Kx_0x_1-Jx_0+I$\\
+	Regresamos la sustitución:\\
+	$a=f[x_0,x_1,x_2]$\\
+	$b=f[x_0,x_1]-f[x_0,x_1,x_2](x_0+x_1)$\\
+	$c=f[x_0,x_1,x_2]x_0x_1-f[x_0,x_1]x_0+f[x_0]$
+\item i)\\
+El termino b nos dice la dirección en la que se desplazará la raíz estimada en la siguiente iteración y la idea con nuestro método es acercarnos cada vez más a la raíz. Sabemos que si tenemos un intervalo donde la función es continua y la función evaluada en los extremos tiene signo opuesto entonces por el teorema de Boltzano podemos esperar que la raíz esté en algún punto de ese intervalo. Una vez tenemos una estimación inicial solo podemos movernos hacía la derecha o izquierda del intervalo para acercarnos a la raíz y esa dirección está mediada por b. \\
+Si b $<$ 0 entonces no estamos moviendo hacia la izquierda del eje, esto se debe a que el termino bx en el polinomio cuadrático es negativo.\\
+si b$\geq$0: estamos moviéndonos a la derecha con cada iteración esto se debe de nuevo al termino lineal bx, en este caso su contribución es positiva.\\
+En cuanto al valor absoluto de ($x_3 -x_2$):\\
+si ($x_3 -x_2$) es positivo, significa que la raíz estimada se está alejando de $x_2$ en la dirección positiva de x, es decir, se mueve a la derecha.\\
+si ($x_3 -x_2$) es negativo, significa que la raíz estimada se está alejando de $x_2$en la dirección negativa de x, es decir,  hacía la izquierda.\\
+Por lo mencionado anteriormente elegir el signo de forma apropiada nos ayuda a minimizar el valor absoluto de ($x_3 -x_2$) con cada iteración, lo que nos ayuda a acercarnos cada vez más a la raíz, es de esta forma que el método de Muller pude llegar a converger hacía la raíz correcta. \\
+
+
+
+
+\end{enumerate}
+
+\end{document}
