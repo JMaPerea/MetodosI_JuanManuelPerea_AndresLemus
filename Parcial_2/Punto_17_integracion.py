@@ -70,7 +70,7 @@ def Valor(k):
 def Error(k):
     ValInt=Valor(k)
     ValTeo=(np.pi**4)/15
-    error=abs(ValInt-ValTeo)/ValTeo
+    error=ValInt/ValTeo
     return error
 
 # punto a
@@ -87,10 +87,10 @@ for i in range(3,11):
 
     
 n=np.arange(3,11)
-plt.plot(n,listerr)
-plt.title('Error por numero de puntos de evaluación')
-plt.xlabel('n punto de evaluación')
-plt.ylabel('error')
+plt.scatter(n,listerr)
+plt.title('accuracy')
+plt.xlabel('n')
+plt.ylabel('e(n)')
 plt.grid()
 plt.show
 
