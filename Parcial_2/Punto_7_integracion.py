@@ -16,9 +16,9 @@ import math
 
 def fsemiesf(x,y):
     
-    if x**2+y**2<=1:
+    if (x**2+y**2)<=1:
         
-        return 1
+        return np.sqrt(1-(x**2-y**2))
     
     else:
         
