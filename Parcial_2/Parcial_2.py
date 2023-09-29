@@ -53,9 +53,17 @@ print(f*100)
 
 poly=fint.ObtLaguerreRodrigues(2)
 raices=fint.Obt_roots_Lag(2)
-weights=fint.ObtWeightsLag(3)
+weights=fint.ObtWeightsLag(2)
+
+
 print(poly)
 print(raices,weights)
+funcionteo=lambda x: sym.exp(-x)*x**3
+gxft=lambda x: funcionteo(x)*sym.exp(x)
+xk=fint.Obt_roots_Lag(3)
+ck=fint.ObtWeightsLag(3)
+valorteo=fint.Estimar_integral(ck, xk, gxft , 3)
+print(valorteo)
 
 
 
