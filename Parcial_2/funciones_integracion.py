@@ -26,7 +26,7 @@ def ObtLaguerreRodrigues(n):
 
 
 def Obt_roots_Lag(n):
-    poly=ObtLaguerreRodrigues(n, x)
+    poly=ObtLaguerreRodrigues(n)
     roots=sym.nroots(poly)
     return roots
 
@@ -34,7 +34,7 @@ def ObtWeightsLag(n):
 
     Roots = np.array(Obt_roots_Lag(n))
     
-    poly = sym.lambdify(x,ObtLaguerreRodrigues(n+1, x))   
+    poly = sym.lambdify(x,ObtLaguerreRodrigues(n+1))   
     
     Weights = Roots / ((n+1)**2*(poly(Roots))**2)
     
@@ -64,7 +64,7 @@ def ObtWeightsHerm(n):
 
     
 
-    poly = sym.lambdify(x,ObtHermiteRodrigues(n-1, x))   
+    poly = sym.lambdify(x,ObtHermiteRodrigues(n-1))   
     
     Weights = (2**(n-1)*sym.factorial(n)*sym.sqrt(np.pi)) / (n**2*poly(Roots)**2)
     
@@ -106,5 +106,18 @@ def Estimar_integral(ck,xk,func,n):
         #print(val)
         
     return sol
+
+def Estimar_integral_leg(ck,xk,func,n,a,b):
+    sol=0
+    
+    for i in range(n):
+        
+        val=ck[i]*func((((b-a)/2)*xk[i])+((a+b)/2))
+        sol+=val
+        #print(val)
+        
+    return ((b-a)/2)*sol
+
+
 
     
