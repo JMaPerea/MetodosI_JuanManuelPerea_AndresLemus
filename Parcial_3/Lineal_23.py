@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov  8 14:46:46 2023
+Created on Wed Nov  8 18:34:06 2023
 
 @author: ADMIN
 """
+
+
+
 
 import numpy as np
 import sympy as sym
@@ -38,7 +41,8 @@ def newton(fun,th0,maxiter=100,tol=1e-6):
 #
 angulo_equlibrio=newton(f,36)
 #print(root)
-
+eq=(np.sin(angulo_equlibrio)**6)+0.0729*(np.sin(angulo_equlibrio)**2)
+print(f'{eq}')
 
 o1,o2,o3,o4,o5,o6=sym.symbols("o1 o2 o3 o4 o5 o6")
 varilist=[o1,o2,o3,o4,o5,o6]
