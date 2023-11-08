@@ -85,7 +85,7 @@ J=jacob(F,vari)
 Fn=sym.lambdify([x,y],F,'numpy')
 Jac=sym.lambdify([x,y],J,'numpy')
 
-N=300
+N=30
 xv=np.linspace(-1,1,N)
 yv=np.linspace(-1,1,N)
 rootlist=[0.8660254037844387,-0.8660254037844387,0]
