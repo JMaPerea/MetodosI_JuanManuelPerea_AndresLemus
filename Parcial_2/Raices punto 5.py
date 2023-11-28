@@ -28,16 +28,14 @@ def ObtLaguerreRodrigues(n,x):
             
     return poly
 
-def GetDLaguerre(n,x):
-    Pn = ObtLaguerreRodrigues(n,x)
-    return sym.diff(Pn,x,1)
+
 
 
 
 
 
 def ObtPolinomiosRaices(n,x):
-    xn = np.linspace(0,n+((n-1)*np.sqrt(n)),100)
+    
     polinomios=[]
     
     roots=[]
