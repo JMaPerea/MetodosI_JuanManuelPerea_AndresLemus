@@ -54,7 +54,7 @@ dL_dy = sym.diff(L, y)
 dL_dz = sym.diff(L, z)
 dL_dλ = sym.diff(L, λ)
 
-
+print("\n Usando Lagrange")
 sistema_ecuaciones = [sym.Eq(dL_dx, 0), sym.Eq(dL_dy, 0), sym.Eq(dL_dz, 0), sym.Eq(dL_dλ, 0)]
 soluciones = sym.solve(sistema_ecuaciones, (x, y, z, λ), dict=True)
 
@@ -67,6 +67,7 @@ for solucion in soluciones:
 valores_f = [V.subs({x: sol[x], y: sol[y], z: sol[z]}) for sol in soluciones]
 minimo = min(valores_f)
 
-print("\nEl mínimo de la función V sujeto a la restricción A es:", -minimo)
+
+print("\nEl maxímo de la función V sujeto a la restricción A es:", -minimo)
 
 
