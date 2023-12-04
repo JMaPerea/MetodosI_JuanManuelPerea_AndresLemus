@@ -16,7 +16,7 @@ sigm = lambda x: 1/(1+np.exp(-x))
 class Layer:
     
     
-    def __init__(self,NC,NN,ActFun,rate=3): # Jugar con la tasa de mutacion
+    def __init__(self,NC,NN,ActFun,rate=4): # Jugar con la tasa de mutacion
         
         self.NC = NC
         self.NN = NN
@@ -84,10 +84,11 @@ class Robot:
     def SetFitness(self):
         
         if -1<self.r[0]<1:
-            self.Fitness = abs(1 / self.Steps)
+            self.Fitness = (1 / self.Steps)
         else:
             self.Fitness=np.inf
-            
+        if self.Fitness < 0:
+            self.Fitness=np.inf
         
         return self.Fitness
        # Brain stuff
@@ -204,8 +205,6 @@ def TimeEvolution(Robots,e,Plot=True):
 # Definimos la rutina de entrenamiento
 def Genetic(Robots, epochs = 200, Plot = True, Plottime=False):
     
-    # Porcentaje de robots elegidos en cada epoch
-    N = int(0.7*len(Robots))
     
     FitVector = np.array([])
     
@@ -244,9 +243,16 @@ def Genetic(Robots, epochs = 200, Plot = True, Plottime=False):
         FitVector = np.append(FitVector, best_fitness)
         
         
-        Temp=Robots.copy()
+        """
+        Para esta parte se probo con N=30%
+        Al igual que convertir la siguiente generacion a copias del mejor individuo
+        
+        """
         for i,r in enumerate(Robots):
-            j=i%N
+            
+            #if i <2:
+            #    Robots[i]=copy.deepcopy(scores[i][1])
+                
             Robots[i]=copy.deepcopy(best_bot)
             
 
@@ -358,9 +364,51 @@ Pesos para Robots atrapados:
     
 Bot 1
 
+Layer 1 - Weights:
+[[24.45430144 -3.40376846 12.85752974 32.50226244  3.89633125]]
+Layer 1 - Biases:
+[[ 30.22667576  -4.42991983 -13.09103441  28.71561198  -2.39270148]]
+
+Layer 2 - Weights:
+[[-28.32271339]
+ [  1.3325299 ]
+ [ 26.01589688]
+ [ -9.96809212]
+ [  8.67368046]]
+Layer 2 - Biases:
+[[33.51701247]]
+
 Bot 2
 
+Layer 1 - Weights:
+[[-26.07197827  22.05514158 -14.75954112 -23.78392298 -22.51983821]]
+Layer 1 - Biases:
+[[ 14.69792756   8.26169945 -16.71072592 -41.41625565  -1.37092952]]
+
+Layer 2 - Weights:
+[[-27.290973  ]
+ [  9.84748031]
+ [ 51.17683145]
+ [  3.62861649]
+ [ 40.91531173]]
+Layer 2 - Biases:
+[[-5.98082697]]
+
 Bot 3
+
+Layer 1 - Weights:
+[[-39.40950508 -34.98899462 -14.97411491  18.90964715  13.36004939]]
+Layer 1 - Biases:
+[[ 8.53089678 18.56926249 -9.95875943 12.03811985 -2.72962767]]
+
+Layer 2 - Weights:
+[[ -8.04576832]
+ [ -2.77665607]
+ [  8.86492155]
+ [-23.81087712]
+ [ 18.64476079]]
+Layer 2 - Biases:
+[[18.7690196]]
 
 Bot 4
 
