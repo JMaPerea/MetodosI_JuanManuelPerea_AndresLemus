@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from IPython.display import clear_output
 import time
 import copy
-from tqdm import tqdm
+
 
 sigm = lambda x: 1/(1+np.exp(-x))
 class Layer:
@@ -70,21 +70,27 @@ class Robot:
     
     def Evolution(self):
         self.r += self.v*self.dt # Euler integration (Metodos 2)
-
+        #self.Steps+=1
+        
+        
         # Cada generación regresamos el robot al origin
         # Y volvemos a estimar su fitness
     def Reset(self):
-        self.Steps = 0.
+        self.Steps = 0
         self.r = np.array([0.,0.])
-        self.Fitness = np.inf    
+        self.Fitness = np.inf
         
     # Aca debes definir que es mejorar en tu proceso evolutivo
     def SetFitness(self):
-        self.Fitness = 0. # Esto no hace nada por ahora
+       
         
+        self.Fitness = 1 / (self.Steps + 1)
         
+            
+        
+        return self.Fitness
        # Brain stuff
-    def BrainActivation(self,x,threshold=0.7): 
+    def BrainActivation(self,x,threshold=0.5): 
         # El umbral (threshold) cerebral es a tu gusto!
         # cercano a 1 es exigente
         # cercano a 0 es sindrome de down
@@ -102,8 +108,7 @@ class Robot:
         if self.Activation[0] > threshold:
             self.v = -self.v
             
-            # Deberias penalizar de alguna forma, dado que mucha activación es desgastante!
-            # Para cualquier cerebro
+            self.Steps=self.Steps+0.9
     
         return self.Activation
     
@@ -171,7 +176,7 @@ def TimeEvolution(Robots,e,Plot=True):
                 ax.scatter(p.r[0],p.r[1],label='Id: {}, Steps: {:.0f}'.format(p.Id,p.Steps))
                 ax.quiver(p.r[0],p.r[1],p.v[0],p.v[1])
                 
-        # Pintamos la activaciones de los primeros 5
+        #Pintamos la activaciones de los primeros 5
         
         if Plot:
             ax1.plot(np.arange(0,len(Robots[:5]),1),Activation[:5],marker='o',color='b',label='Activation')
@@ -201,24 +206,39 @@ def Genetic(Robots, epochs = 200, Plot = True, Plottime=False):
         # Reiniciamos y mutamos los pesos
         
         for p in Robots:
-            p.Reset() 
             p.Mutate()
+            p.Reset()
             
         # Evolucionamos
         TimeEvolution(Robots,e,Plottime) # Apagar dibujar la evolución para entrenar
         
         # Actualizamos fitness de cada robot
-        for i,p in enumerate(Robots):
+        for p in Robots:
             p.SetFitness()
+            print(p.Fitness)
         
         # Aca va toda la rutina de ordenar los bots del más apto al menos apto
+        scores=[(p.Fitness,p.Id) for p in Robots]
+        scores.sort(key=lambda t: t[0], reverse=False)
+        print(scores)
         
         
         # Guardamos el mejor fitness y le mejor robot
-        best_fitness = 0.
-        best_bot = Robots[0] #Esto no es asi, deben ver como se elige al mejor
         
-        FitVector = np.append(FitVector,best_fitness)
+
+        best_fitness = scores[0][0]
+        best_bot = Robots[scores[0][1]]
+        FitVector = np.append(FitVector, best_fitness)
+        
+        NewGeneration = []
+        for i in range(len(Robots)):
+            parent_index = i % N
+            new_robot = copy.deepcopy(Robots[parent_index])
+            new_robot.Mutate()
+            NewGeneration.append(new_robot)
+
+        # Actualizamos la población con la nueva generación
+        Robots = NewGeneration
         
         for i in range(len(x)):
             Act[i] = best_bot.BrainActivation(x[i])
@@ -229,24 +249,27 @@ def Genetic(Robots, epochs = 200, Plot = True, Plottime=False):
                     
             # Last fitness
             print('Last Fitness:', FitVector[-1])
+            
         
+        # if Plot:
+            
+        #     ax,ax1 = GetPlot()
+        #     ax.plot(x,Act,color='k')
+        #     ax.set_ylim(0.,1)
+        #     ax.axhline(y=0.75,ls='--',color='r',label='Threshold')
+            
+        #     ax1.set_title('Fitness')
+        #     ax1.plot(FitVector)
         
-        if Plot:
+        #     ax.legend(loc=0)
             
-            ax,ax1 = GetPlot()
-            ax.plot(x,Act,color='k')
-            ax.set_ylim(0.,1)
-            ax.axhline(y=0.75,ls='--',color='r',label='Threshold')
+        #     plt.show()
             
-            ax1.set_title('Fitness')
-            ax1.plot(FitVector)
-        
-            ax.legend(loc=0)
-            
-            plt.show()
-            
-            time.sleep(0.01)
+        #     time.sleep(0.01)
         
         
     
     return best_bot, FitVector
+
+Robots = GetRobots(10)
+Best, FitVector = Genetic(Robots,Plot=True,Plottime=False) # Apagar Plottime para el entrenamiento
