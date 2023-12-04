@@ -16,7 +16,7 @@ sigm = lambda x: 1/(1+np.exp(-x))
 class Layer:
     
     
-    def __init__(self,NC,NN,ActFun,rate=0.1): # Jugar con la tasa de mutacion
+    def __init__(self,NC,NN,ActFun,rate=3): # Jugar con la tasa de mutacion
         
         self.NC = NC
         self.NN = NN
@@ -70,7 +70,7 @@ class Robot:
     
     def Evolution(self):
         self.r += self.v*self.dt # Euler integration (Metodos 2)
-        #self.Steps+=1
+        
         
         
         # Cada generación regresamos el robot al origin
@@ -82,15 +82,16 @@ class Robot:
         
     # Aca debes definir que es mejorar en tu proceso evolutivo
     def SetFitness(self):
-       
         
-        self.Fitness = 1 / (self.Steps + 1)
-        
+        if -1<self.r[0]<1:
+            self.Fitness = abs(1 / self.Steps)
+        else:
+            self.Fitness=np.inf
             
         
         return self.Fitness
        # Brain stuff
-    def BrainActivation(self,x,threshold=0.5): 
+    def BrainActivation(self,x,threshold=0.7): 
         # El umbral (threshold) cerebral es a tu gusto!
         # cercano a 1 es exigente
         # cercano a 0 es sindrome de down
@@ -103,12 +104,16 @@ class Robot:
                 output = self.Layers[i].Activation(output)
         
         self.Activation = np.round(output,4)
-    
+        
         # Cambiamos el vector velocidad
-        if self.Activation[0] > threshold:
+        if self.Activation[0] > threshold :
+            
             self.v = -self.v
             
-            self.Steps=self.Steps+0.9
+            
+            self.Steps=self.Steps-0.9
+            
+            
     
         return self.Activation
     
@@ -134,8 +139,9 @@ def GetRobots(N):
         
     return Robots
 dt = 0.1
-t = np.arange(0.,1.,dt)
+t = np.arange(0.,5.,dt)
 Robots = GetRobots(10)
+#print(Robots)
 def GetPlot():
     
     fig = plt.figure(figsize=(8,4))
@@ -170,7 +176,13 @@ def TimeEvolution(Robots,e,Plot=True):
             Act = p.BrainActivation(p.GetR()[0])
             Activation[i] = Act
             # Region donde aumentamos los pasos para el fitness
-            
+            if -1<p.r[0]<1:
+                p.Steps+=1
+                
+            else:
+                p.Steps-=1
+                
+            #p.Steps+=1
                 
             if Plot and i < 5: # Solo pintamos los primeros 5, por tiempo de computo
                 ax.scatter(p.r[0],p.r[1],label='Id: {}, Steps: {:.0f}'.format(p.Id,p.Steps))
@@ -215,10 +227,11 @@ def Genetic(Robots, epochs = 200, Plot = True, Plottime=False):
         # Actualizamos fitness de cada robot
         for p in Robots:
             p.SetFitness()
-            print(p.Fitness)
+            #print(p.Fitness)
+            #print(p.Steps)
         
         # Aca va toda la rutina de ordenar los bots del más apto al menos apto
-        scores=[(p.Fitness,p.Id) for p in Robots]
+        scores=[(p.Fitness,p) for p in Robots]
         scores.sort(key=lambda t: t[0], reverse=False)
         print(scores)
         
@@ -227,18 +240,21 @@ def Genetic(Robots, epochs = 200, Plot = True, Plottime=False):
         
 
         best_fitness = scores[0][0]
-        best_bot = Robots[scores[0][1]]
+        best_bot = scores[0][1]
         FitVector = np.append(FitVector, best_fitness)
         
-        NewGeneration = []
-        for i in range(len(Robots)):
-            parent_index = i % N
-            new_robot = copy.deepcopy(Robots[parent_index])
-            new_robot.Mutate()
-            NewGeneration.append(new_robot)
+        
+        Temp=Robots.copy()
+        for i,r in enumerate(Robots):
+            j=i%N
+            Robots[i]=copy.deepcopy(best_bot)
+            
 
-        # Actualizamos la población con la nueva generación
-        Robots = NewGeneration
+        
+        
+        # best_fitness = scores[0][0]
+        # best_bot = scores[0][1]
+        # FitVector = np.append(FitVector, best_fitness)
         
         for i in range(len(x)):
             Act[i] = best_bot.BrainActivation(x[i])
@@ -251,25 +267,101 @@ def Genetic(Robots, epochs = 200, Plot = True, Plottime=False):
             print('Last Fitness:', FitVector[-1])
             
         
-        # if Plot:
+        if Plot:
             
-        #     ax,ax1 = GetPlot()
-        #     ax.plot(x,Act,color='k')
-        #     ax.set_ylim(0.,1)
-        #     ax.axhline(y=0.75,ls='--',color='r',label='Threshold')
+            ax,ax1 = GetPlot()
+            ax.plot(x,Act,color='k')
+            ax.set_ylim(0.,1)
+            ax.axhline(y=0.75,ls='--',color='r',label='Threshold')
             
-        #     ax1.set_title('Fitness')
-        #     ax1.plot(FitVector)
+            ax1.set_title('Fitness')
+            ax1.plot(FitVector)
         
-        #     ax.legend(loc=0)
+            ax.legend(loc=0)
             
-        #     plt.show()
+            plt.show()
             
-        #     time.sleep(0.01)
+            time.sleep(0.01)
         
         
     
     return best_bot, FitVector
 
 Robots = GetRobots(10)
-Best, FitVector = Genetic(Robots,Plot=True,Plottime=False) # Apagar Plottime para el entrenamiento
+Best, FitVector = Genetic(Robots)#,Plot=True,Plottime=True) # Apagar Plottime para el entrenamiento
+
+"""
+testing
+
+"""
+Bestl=[Best]
+def Timetest(Robots,e,Plot=True):
+    
+  
+    for it in range(t.shape[0]):
+        
+        if Plot:
+        
+            clear_output(wait=True)
+        
+            ax,ax1 = GetPlot()
+            ax1.set_ylim(0.,1.)
+        
+            ax.set_title('t = {:.3f}'.format(t[it]))
+        
+        Activation = np.zeros(len(Robots))
+        
+        for i,p in enumerate(Robots):
+            p.Evolution()
+         
+            # Activacion cerebral
+            Act = p.BrainActivation(p.GetR()[0])
+            Activation[i] = Act
+            # Region donde aumentamos los pasos para el fitness
+            if -1<p.r[0]<1:
+                p.Steps+=1
+                
+            else:
+                p.Steps+=0
+                p.v = -p.v
+            #p.Steps+=1
+                
+            if Plot and i < 5: # Solo pintamos los primeros 5, por tiempo de computo
+                ax.scatter(p.r[0],p.r[1],label='Id: {}, Steps: {:.0f}'.format(p.Id,p.Steps))
+                ax.quiver(p.r[0],p.r[1],p.v[0],p.v[1])
+                
+        #Pintamos la activaciones de los primeros 5
+        
+        if Plot:
+            ax1.plot(np.arange(0,len(Robots[:5]),1),Activation[:5],marker='o',color='b',label='Activation')
+            ax1.axhline(y=0.7,color='r')
+        
+        if Plot:
+        
+            ax.legend(loc=0)  
+            ax1.legend(loc=0)
+            plt.show()
+            time.sleep(0.001)
+            
+Timetest(Bestl, 1)
+Red=Best.GetBrain()
+
+for i, layer in enumerate(Red):
+    print(f"Layer {i + 1} - Weights:")
+    print(layer.W)
+    print(f"Layer {i + 1} - Biases:")
+    print(layer.b)
+    print()
+    
+"""
+Pesos para Robots atrapados:
+    
+Bot 1
+
+Bot 2
+
+Bot 3
+
+Bot 4
+
+"""
