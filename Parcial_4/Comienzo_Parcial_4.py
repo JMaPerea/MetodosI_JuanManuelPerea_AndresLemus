@@ -232,7 +232,7 @@ def Genetic(Robots, epochs = 200, Plot = True, Plottime=False):
         # Aca va toda la rutina de ordenar los bots del más apto al menos apto
         scores=[(p.Fitness,p) for p in Robots]
         scores.sort(key=lambda t: t[0], reverse=False)
-        print(scores)
+        #print(scores)
         
         
         # Guardamos el mejor fitness y le mejor robot
@@ -244,8 +244,8 @@ def Genetic(Robots, epochs = 200, Plot = True, Plottime=False):
         
         
         """
-        Para esta parte se probo con N=30%
-        Al igual que convertir la siguiente generacion a copias del mejor individuo
+        Para esta parte se probo con N=30% bot (2,3)
+        Al igual que convertir la siguiente generacion a copias del mejor individuo bot (1,4)
         
         """
         for i,r in enumerate(Robots):
@@ -411,5 +411,19 @@ Layer 2 - Biases:
 [[18.7690196]]
 
 Bot 4
+
+Layer 1 - Weights:
+[[20.03263004  1.85871447 55.53895833 49.74170175 23.89100888]]
+Layer 1 - Biases:
+[[  3.63804459 -42.2048559   34.46830142 -47.32328182  12.34044049]]
+
+Layer 2 - Weights:
+[[ 10.61177242]
+ [-17.39655793]
+ [-42.5320814 ]
+ [ 27.77473122]
+ [-20.82806998]]
+Layer 2 - Biases:
+[[34.65585069]]
 
 """
